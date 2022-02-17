@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "462755425774",
+    "project_id": "takenoteof-e2bb9",
+    "storage_bucket": "takenoteof-e2bb9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:462755425774:android:c2ae1644c3e34c73f232ff",
+        "android_client_info": {
+          "package_name": "com.example.takenoteof"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "462755425774-2h9a7h7l20godiejc8mj7dpikejtokms.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBn95iHMX_QFZ-GBMU09yPlz_tc99FZmbA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "462755425774-2h9a7h7l20godiejc8mj7dpikejtokms.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,103 @@
+package com.example.takenoteof;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.appcompat.widget.Toolbar;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class editnote extends AppCompatActivity {
+
+    Intent data;
+    EditText medittitleofnote,meditcontentofnote;
+    FloatingActionButton msaveeditnote;
+    FirebaseAuth firebaseAuth;
+    FirebaseFirestore firebaseFirestore;
+    FirebaseUser firebaseUser;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_editnote);
+        meditcontentofnote = findViewById(R.id.editcontentofnote);
+        medittitleofnote = findViewById(R.id.edittitleofnote);
+        msaveeditnote = findViewById(R.id.saveeditnote);
+        data = getIntent();
+
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        Toolbar toolbar = findViewById(R.id.toolbarofeditnote);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        String title = data.getStringExtra("title");
+        String content = data.getStringExtra("content");
+        meditcontentofnote.setText(content);
+        medittitleofnote.setText(title);
+
+        msaveeditnote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newtitle = medittitleofnote.getText().toString();
+                String newcontent = meditcontentofnote.getText().toString();
+
+                if(newcontent.isEmpty()||newtitle.isEmpty())
+                {
+                    Toast.makeText(editnote.this, "Empty Fields", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else
+                {
+                    DocumentReference documentReference = firebaseFirestore.collection("notes").document(firebaseUser.getUid()).collection("myNote").document(data.getStringExtra("noteId"));
+                    Map<String , Object> note = new HashMap<>();
+                    note.put("title",newtitle);
+                    note.put("content",newcontent);
+                    documentReference.set(note).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(editnote.this, "Note Updated", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(editnote.this,Notes.class));
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(editnote.this, "Failed To Update", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                }
+            }
+        });
+
+
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId()==android.R.id.home)
+        {
+            onBackPressed();;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+}
